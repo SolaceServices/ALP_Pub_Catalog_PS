@@ -1,0 +1,19 @@
+3. Frontend Implementation
+// In your website's JavaScript
+fetch('https://your-proxy-domain.com/courses')
+  .then(response => response.json())
+  .then(courses => {
+    courses.forEach(course => {
+      console.log(`${course.title} - ${course.price}`);
+      // Display in your UI
+    });
+  });
+
+
+5. Rate Limiting
+Add express-rate-limit middleware
+
+6. CORS Restrictions
+Use cors package to whitelist your domain only
+
+
