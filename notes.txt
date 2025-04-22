@@ -13,7 +13,5 @@ fetch('https://your-proxy-domain.com/courses')
 5. Rate Limiting
 Add express-rate-limit middleware
 
-6. CORS Restrictions
-Use cors package to whitelist your domain only
 
 

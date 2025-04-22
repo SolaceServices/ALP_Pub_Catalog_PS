@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 const axios = require("axios");
 const cors = require("cors");
 require("dotenv").config();
@@ -90,7 +90,8 @@ const formatData = (response) => {
     name: course.name.toUpperCase(),
     updated_at: formatDate(course.date_last_updated),
     description: course.description,
-    price: course.price > 0 ? `$${(course.price / 100).toFixed(2)}` : "Free",
+    price:
+      course.price > 0 ? `$${parseFloat(course.price).toFixed(2)}` : "Free",
     img_url: course.img_url,
     course_type: course.course_type,
     duration: course.duration,
