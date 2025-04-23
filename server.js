@@ -32,6 +32,7 @@ async function getNewToken() {
     expires_at: Date.now() + response.data.expires_in * 1000,
   };
 }
+
 async function getToken() {
   if (Date.now() >= tokenData.expires_at - 300000) {
     // Refresh 5 mins early
@@ -67,7 +68,7 @@ app.get("/courses", async (req, res) => {
       }
     );
 
-    response = formatData(response);
+    response = formatCourseData(response);
 
     res.json(response);
   } catch (error) {
@@ -75,19 +76,36 @@ app.get("/courses", async (req, res) => {
     res.status(500).send("Failed to fetch courses");
   }
 });
+app.get("/lp", async (req, res) => {
+  try {
+    //   const token = await getToken();
+    //   const token = "get from the Docebo API management webpage for hard-coded testing";
+    //   const response = await axios.get(
+    //     "https://solacelearn.docebosaas.com/learningplan/v1/learningplans?courses_filter=with_assigned_courses&status_filter[]=1&page_size=100&page=1",
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     }
+    //   );
 
-// Start server with initial token
-app.listen(PORT, async () => {
-  tokenData = await getNewToken();
-  console.log(`Server running on port: ${PORT}`);
+    //   const formattedData = await formatLearningPlanData(response);
+
+    //   res.json(formattedData);
+    let placeholder = [];
+    res.json(placeholder);
+  } catch (error) {
+    console.error("API Error:", error.response?.data || error.message);
+    res.status(500).send("Failed to fetch courses");
+  }
 });
 
 // Utility Functions
-const formatData = (response) => {
+const formatCourseData = (response) => {
   let data = response.data.data.items;
   return data.map((course) => ({
     id: course.id_course,
-    name: course.name.toUpperCase(),
+    name: course.name,
     updated_at: formatDate(course.date_last_updated),
     description: course.description,
     price:
@@ -99,9 +117,27 @@ const formatData = (response) => {
     category: course.category,
   }));
 };
-
-// Date formatting helper
+const formatLearningPlanData = (response) => {
+  let data = response.data.data.items;
+  return data.map((lp) => ({
+    id: lp.learning_plan_id,
+    name: lp.title,
+    updated_at: formatDate(lp.updated_on),
+    description: lp.description,
+    img_url: lp.thumbnail_url,
+    course_type: "learning-plan",
+    price:
+      lp.price > 0 ? `$${(parseFloat(lp.price) / 100).toFixed(2)}` : "Free",
+    assigned_courses_count: lp.assigned_courses_count,
+  }));
+};
 const formatDate = (dateString) => {
   const options = { year: "numeric", month: "short", day: "numeric" };
   return new Date(dateString).toLocaleDateString("en-US", options);
 };
+
+// Start server with initial token
+app.listen(PORT, async () => {
+  tokenData = await getNewToken();
+  console.log(`Server running on port: ${PORT}`);
+});
