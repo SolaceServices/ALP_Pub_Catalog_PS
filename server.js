@@ -185,15 +185,23 @@ app.get("/lp", async (req, res) => {
   }
 });
 app.get("/health", (req, res) => {
-  const status = tokenData.access_token ? "healthy" : "degraded";
-  res.json({
-    status,
-    tokenMetrics,
-    circuitBreaker: {
-      state: breaker.toJSON().state,
-      stats: breaker.stats,
-    },
-  });
+  try {
+    const status = tokenData.access_token ? "healthy" : "degraded";
+    res.json({
+      status,
+      tokenMetrics,
+      circuitBreaker: {
+        state: breaker.status.stats.opened ? "open" : "closed",
+        stats: breaker.stats,
+      },
+    });
+  } catch (error) {
+    console.error("Health Route Error:", error.message);
+    res.status(500).json({
+      error: "Failed Health Check",
+      details: error.message,
+    });
+  }
 });
 
 // Data Formatting
