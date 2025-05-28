@@ -138,7 +138,7 @@ app.get("/courses", async (req, res) => {
         },
       }
     );
-
+    console.log("GET - Courses");
     res.json(formatCourseData(response.data));
   } catch (error) {
     console.error("API Error:", error.message);
@@ -166,7 +166,7 @@ app.get("/lp", async (req, res) => {
         },
       }
     );
-
+    console.log("GET - Learning Plans");
     res.json(formatLearningPlanData(response.data));
   } catch (error) {
     console.error("LP Route Error:", error.message);
