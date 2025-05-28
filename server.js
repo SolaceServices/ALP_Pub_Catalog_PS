@@ -126,6 +126,10 @@ app.use((err, req, res, next) => {
 });
 
 // Routes
+app.get("/", (req, res) => {
+  res.send("API is running!");
+});
+
 app.get("/courses", async (req, res) => {
   //don't need access token for public courses
   try {
