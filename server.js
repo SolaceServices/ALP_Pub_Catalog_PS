@@ -133,7 +133,7 @@ app.get("/courses", async (req, res) => {
   //don't need access token for public courses
   try {
     const response = await breaker.fire(
-      `${process.env.DOCEBO_API_URL}/learn/v1/courses`,
+      `https://solacelearn.docebosaas.com/learn/v1/courses`,
       {
         params: {
           visibility: 1,
@@ -155,7 +155,7 @@ app.get("/lp", async (req, res) => {
     const { access_token } = await getToken();
 
     const response = await breaker.fire(
-      `${process.env.DOCEBO_API_URL}/learningplan/v1/learningplans`,
+      `https://solacelearn.docebosaas.com/learningplan/v1/learningplans`,
       {
         params: {
           courses_filter: "with_assigned_courses",
@@ -208,7 +208,7 @@ app.get("/user-stats", async (req, res) => {
   try {
     const { access_token } = await getToken();
     const data = await breaker.fire(
-      `${process.env.DOCEBO_API_URL}/report/v1/mytranscript?page_size=200&page=1`,
+      `https://solacelearn.docebosaas.com/report/v1/mytranscript?page_size=200&page=1`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
