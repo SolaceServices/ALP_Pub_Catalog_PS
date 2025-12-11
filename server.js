@@ -129,12 +129,11 @@ app.use((err, req, res, next) => {
 app.get("/", (req, res) => {
   res.send("API is running!");
 });
-
 app.get("/courses", async (req, res) => {
   //don't need access token for public courses
   try {
     const response = await breaker.fire(
-      "https://solacelearn.docebosaas.com/learn/v1/courses",
+      `${process.env.DOCEBO_API_URL}/learn/v1/courses`,
       {
         params: {
           visibility: 1,
@@ -156,7 +155,7 @@ app.get("/lp", async (req, res) => {
     const { access_token } = await getToken();
 
     const response = await breaker.fire(
-      "https://training.solace.com/learningplan/v1/learningplans",
+      `${process.env.DOCEBO_API_URL}/learningplan/v1/learningplans`,
       {
         params: {
           courses_filter: "with_assigned_courses",
@@ -205,8 +204,74 @@ app.get("/health", (req, res) => {
     });
   }
 });
+app.get("/user-stats", async (req, res) => {
+  try {
+    const { access_token } = await getToken();
+    const data = await breaker.fire(
+      `${process.env.DOCEBO_API_URL}/report/v1/mytranscript?page_size=200&page=1`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
 
-// Data Formatting
+    const transcript = data?.data.data.items;
+    const enrolledCount = filterForEnrolled(transcript);
+    const completedCount = filterForCompleted(transcript);
+    const certsCount = filterForCertificates(transcript);
+
+    res.send(`
+<section class="ext-get-started-hero">
+    <div class="ext-get-started-container flex-column justify-center align-center">
+        <img class="ext-get-started-hero-logo"
+            src="https://static-assets.canada-1.enterprise.docebodns.com/files/s/o/solacelearn_docebosaas_com/userfiles/30610/solace_academy_logo.png"
+            alt="solace_academy_logo.png"/>
+        <h1 class="ext-get-started-hero-title text-white text-center">My Courses and Learning Activity</h1>
+        <p class="ext-get-started-hero-description text-white text-center">Explore your enrolled and completed courses,
+            track your learning progress, and continue building your Solace skills. </p>
+        <div class="ext-get-started-stats flex-row">
+            <div
+                class="ext-get-started-stat-card flex-column justify-center align-center text-center padding-1 margin-1 border-radius-s">
+                <span class="ext-get-started-stat-number font-weight-650">${
+                  Object.keys(enrolledCount).length || 0
+                }</span> <span
+                    class="ext-get-started-stat-label">Courses In Progress</span>
+            </div>
+            <div
+                class="ext-get-started-stat-card flex-column justify-center align-center text-center padding-1 margin-1 border-radius-s">
+                <span class="ext-get-started-stat-number font-weight-650">${
+                  Object.keys(completedCount).length || 0
+                }</span> <span
+                    class="ext-get-started-stat-label">Courses Completed</span>
+            </div>
+            <div
+                class="ext-get-started-stat-card flex-column justify-center align-center text-center padding-1 margin-1 border-radius-s">
+                <span class="ext-get-started-stat-number font-weight-650">${
+                  Object.keys(certsCount).length || 0
+                }</span> <span
+                    class="ext-get-started-stat-label">Certifications Earned</span>
+            </div>
+        </div>
+    </div>
+</section>`);
+  } catch (error) {
+    console.error("User Stats Route Error:", error.message);
+
+    if (error.code === "ECIRCUITBREAKER") {
+      return res.status(503).json({
+        error: "Service temporarily unavailable",
+        retryAfter: 30,
+      });
+    }
+    res.status(500).json({
+      error: "Internal server error",
+      details: error.message,
+    });
+  }
+});
+
+// Utility Functions
 const formatCourseData = (response) => {
   const data = response.data?.items || [];
   return data.map((course) => ({
@@ -244,6 +309,34 @@ const formatDate = (dateString) => {
   } catch (e) {
     return "Invalid date format";
   }
+};
+const filterForEnrolled = (transcript) => {
+  return transcript.filter(
+    (item) =>
+      item.type !== "learningplan" &&
+      !item.name.toLowerCase().includes("archived") &&
+      item.enrollment_status == "in_progress"
+  );
+};
+const filterForCompleted = (transcript) => {
+  return transcript.filter(
+    (item) =>
+      item.enrollment_status == "completed" && item.type !== "learningplan"
+  );
+};
+const filterForCertificates = (transcript) => {
+  const courseIds = [245, 262, 625, 595, 596, 551, 347, 280, 307];
+
+  return transcript.filter((item) => {
+    if (item.enrollment_status !== "completed" || !item.certificate_url)
+      return false;
+
+    if (item.score !== 0) {
+      return courseIds.some((id) =>
+        item.certificate_url.includes(`course_id=${id}`)
+      );
+    }
+  });
 };
 
 // Graceful Shutdown
