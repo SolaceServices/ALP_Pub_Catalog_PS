@@ -222,39 +222,161 @@ app.get("/user-stats", async (req, res) => {
     const certsCount = filterForCertificates(transcript);
 
     res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* -------------------------
+       Layout & Utility Classes
+    --------------------------*/
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #061e33;
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .flex-column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .justify-center {
+      justify-content: center;
+    }
+
+    .align-center {
+      align-items: center;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-white {
+      color: #ffffff;
+    }
+
+    .padding-1 {
+      padding: 1rem;
+    }
+
+    .margin-1 {
+      margin: 1rem;
+    }
+
+    .border-radius-s {
+      border-radius: 0.5rem;
+    }
+
+    .font-weight-650 {
+      font-weight: 650;
+    }
+
+    /* -------------------------
+       Component Styles
+    --------------------------*/
+    .ext-get-started-container {
+      margin: auto;
+      max-width: 60%;
+    }
+
+    .ext-get-started-hero-logo {
+      width: 12rem;
+    }
+
+    .ext-get-started-hero-title {
+      font-size: 2.5rem !important;
+      margin: 2rem;
+    }
+
+    .ext-get-started-hero-description {
+      max-width: 65%;
+      line-height: 1.75rem !important;
+    }
+
+    .ext-get-started-stats {
+      padding-top: 1rem;
+    }
+
+    .ext-get-started-stat-card {
+      background-color: #092c48;
+      color: #b7fe86;
+      width: 7rem;
+    }
+
+    .ext-get-started-stat-number {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .ext-get-started-stat-label {
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
 <section class="ext-get-started-hero">
-    <div class="ext-get-started-container flex-column justify-center align-center">
-        <img class="ext-get-started-hero-logo"
-            src="https://static-assets.canada-1.enterprise.docebodns.com/files/s/o/solacelearn_docebosaas_com/userfiles/30610/solace_academy_logo.png"
-            alt="solace_academy_logo.png"/>
-        <h1 class="ext-get-started-hero-title text-white text-center">My Courses and Learning Activity</h1>
-        <p class="ext-get-started-hero-description text-white text-center">Explore your enrolled and completed courses,
-            track your learning progress, and continue building your Solace skills. </p>
-        <div class="ext-get-started-stats flex-row">
-            <div
-                class="ext-get-started-stat-card flex-column justify-center align-center text-center padding-1 margin-1 border-radius-s">
-                <span class="ext-get-started-stat-number font-weight-650">${
-                  Object.keys(enrolledCount).length || 0
-                }</span> <span
-                    class="ext-get-started-stat-label">Courses In Progress</span>
-            </div>
-            <div
-                class="ext-get-started-stat-card flex-column justify-center align-center text-center padding-1 margin-1 border-radius-s">
-                <span class="ext-get-started-stat-number font-weight-650">${
-                  Object.keys(completedCount).length || 0
-                }</span> <span
-                    class="ext-get-started-stat-label">Courses Completed</span>
-            </div>
-            <div
-                class="ext-get-started-stat-card flex-column justify-center align-center text-center padding-1 margin-1 border-radius-s">
-                <span class="ext-get-started-stat-number font-weight-650">${
-                  Object.keys(certsCount).length || 0
-                }</span> <span
-                    class="ext-get-started-stat-label">Certifications Earned</span>
-            </div>
-        </div>
+  <div class="ext-get-started-container flex-column justify-center align-center">
+
+    <img
+      class="ext-get-started-hero-logo"
+      src="https://static-assets.canada-1.enterprise.docebodns.com/files/s/o/solacelearn_docebosaas_com/userfiles/30610/solace_academy_logo.png"
+      alt="Solace Academy Logo"
+    />
+
+    <h1 class="ext-get-started-hero-title text-white text-center">
+      My Courses and Learning Activity
+    </h1>
+
+    <p class="ext-get-started-hero-description text-white text-center">
+      Explore your enrolled and completed courses, track your learning progress,
+      and continue building your Solace skills.
+    </p>
+
+    <div class="ext-get-started-stats flex-row">
+
+      <div class="ext-get-started-stat-card flex-column justify-center align-center text-center padding-1 margin-1 border-radius-s">
+        <span class="ext-get-started-stat-number font-weight-650">
+          ${Object.keys(enrolledCount).length || 0}
+        </span>
+        <span class="ext-get-started-stat-label">
+          Courses In Progress
+        </span>
+      </div>
+
+      <div class="ext-get-started-stat-card flex-column justify-center align-center text-center padding-1 margin-1 border-radius-s">
+        <span class="ext-get-started-stat-number font-weight-650">
+          ${Object.keys(completedCount).length || 0}
+        </span>
+        <span class="ext-get-started-stat-label">
+          Courses Completed
+        </span>
+      </div>
+
+      <div class="ext-get-started-stat-card flex-column justify-center align-center text-center padding-1 margin-1 border-radius-s">
+        <span class="ext-get-started-stat-number font-weight-650">
+          ${Object.keys(certsCount).length || 0}
+        </span>
+        <span class="ext-get-started-stat-label">
+          Certifications Earned
+        </span>
+      </div>
+
     </div>
-</section>`);
+  </div>
+</section>
+
+</body>
+</html>
+`);
   } catch (error) {
     console.error("User Stats Route Error:", error.message);
 
