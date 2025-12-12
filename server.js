@@ -299,6 +299,8 @@ app.get("/user-stats", async (req, res) => {
     .ext-get-started-hero-description {
       max-width: 65%;
       line-height: 1.75rem !important;
+      font-size: 14px;
+      font-weight: 400;
     }
 
     .ext-get-started-stats {
