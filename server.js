@@ -300,7 +300,8 @@ app.get("/user-stats", async (req, res) => {
       max-width: 65%;
       line-height: 1.75rem !important;
       font-size: 14px;
-      font-weight: 400;
+      font-weight: 300;
+      margin-top: 0;
     }
 
     .ext-get-started-stats {
@@ -310,16 +311,17 @@ app.get("/user-stats", async (req, res) => {
     .ext-get-started-stat-card {
       background-color: #092c48;
       color: #b7fe86;
-      width: 7rem;
+      width: 8rem;
     }
 
     .ext-get-started-stat-number {
       font-size: 1.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
 
     .ext-get-started-stat-label {
-      font-size: 0.8rem;
+      font-size: 12.8px;
+      font-weight: 300;
     }
   </style>
 </head>
