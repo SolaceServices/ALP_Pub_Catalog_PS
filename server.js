@@ -323,6 +323,12 @@ app.get("/user-stats", async (req, res) => {
       font-size: 12.8px;
       font-weight: 300;
     }
+
+    @media (max-width: 659px){
+      .ext-get-started-hero-description {
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
