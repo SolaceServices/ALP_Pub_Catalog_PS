@@ -325,9 +325,30 @@ app.get("/user-stats", async (req, res) => {
       font-weight: 300;
     }
 
+/* -------------------------
+       Media Queries
+    --------------------------*/
     @media (max-width: 659px){
       .ext-get-started-hero-description {
         max-width: 100%;
+      }
+    }
+    @media (max-width: 555px){
+      .ext-get-started-stat-card {
+        background-color: #092c48;
+        color: #b7fe86;
+        width: 8rem;
+        margin: 0.2rem !important;
+      }
+    }
+    @media (max-width: 501px){
+      .ext-get-started-stat-card {
+        display: none;
+      }
+    }
+    @media (max-width: 405px){
+      .ext-get-started-hero-title {
+        font-size: 35px;
       }
     }
   </style>
