@@ -294,6 +294,7 @@ app.get("/user-stats", async (req, res) => {
       font-size: 40px !important;
       margin: 2rem;
       font-weight: 500;
+      width: 100%;
     }
 
     .ext-get-started-hero-description {
