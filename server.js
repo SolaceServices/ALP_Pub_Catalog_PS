@@ -293,6 +293,7 @@ app.get("/user-stats", async (req, res) => {
     .ext-get-started-hero-title {
       font-size: 40px !important;
       margin: 2rem;
+      font-weight: 500;
     }
 
     .ext-get-started-hero-description {
