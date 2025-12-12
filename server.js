@@ -231,10 +231,11 @@ app.get("/user-stats", async (req, res) => {
     /* -------------------------
        Layout & Utility Classes
     --------------------------*/
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500;600;700&display=swap');
+
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background-color: #061e33;
+      font-family: "Open Sans", sans-serif;
     }
 
     .flex-row {
@@ -292,7 +293,7 @@ app.get("/user-stats", async (req, res) => {
     }
 
     .ext-get-started-hero-title {
-      font-size: 2.5rem !important;
+      font-size: 40px !important;
       margin: 2rem;
     }
 
