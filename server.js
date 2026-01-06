@@ -215,20 +215,8 @@ app.get("/user-stats", async (req, res) => {
 
     // ====================================================================================================
 
-    // const userIdStr = String(user_id);
-    // const usernameStr = String(username);
-    // const authCodeStr = String(auth_code);
-    // const salt = String(process.env.DOCEBO_SALT_SECRET);
-
-    // const baseString = `${userIdStr},${usernameStr},${authCodeStr},${salt}`;
-
-    // const expectedHashtest = crypto
-    //   .createHash("sha256")
-    //   .update(baseString, "utf8")
-    //   .digest("hex");
-
-    // console.log("  expectedHash:", expectedHashtest);
-    // console.log("  received hash:", hash);
+    console.log("📥 Incoming query params:", req.query);
+    console.log("📥 DOCEBO_SALT_SECRET set?", !!process.env.DOCEBO_SALT_SECRET);
 
     // ====================================================================================================
 
@@ -238,6 +226,25 @@ app.get("/user-stats", async (req, res) => {
         `${user_id},${username},${auth_code},${process.env.DOCEBO_SALT_SECRET}`
       )
       .digest("hex");
+
+    // ====================================================================================================
+
+    const userIdStr = String(user_id);
+    const usernameStr = String(username);
+    const authCodeStr = String(auth_code);
+    const salt = String(process.env.DOCEBO_SALT_SECRET);
+    const baseString = `${userIdStr},${usernameStr},${authCodeStr},${salt}`;
+
+    console.log("🔎 Hash debug:");
+    console.log("  user_id     :", userIdStr);
+    console.log("  username    :", usernameStr);
+    console.log("  auth_code   :", authCodeStr);
+    console.log("  salt        :", salt);
+    console.log("  baseString  :", baseString);
+    console.log("  expectedHash:", expectedHash);
+    console.log("  received hash:", hash);
+
+    // ====================================================================================================
 
     if (hash !== expectedHash) {
       return res.status(401).send("Invalid signature");
