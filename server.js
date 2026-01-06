@@ -215,20 +215,20 @@ app.get("/user-stats", async (req, res) => {
 
     // ====================================================================================================
 
-    // const userIdStr = String(user_id);
-    // const usernameStr = String(username);
-    // const authCodeStr = String(auth_code);
-    // const salt = String(process.env.DOCEBO_SALT_SECRET);
+    const userIdStr = String(user_id);
+    const usernameStr = String(username);
+    const authCodeStr = String(auth_code);
+    const salt = String(process.env.DOCEBO_SALT_SECRET);
 
-    // const baseString = `${userIdStr},${usernameStr},${authCodeStr},${salt}`;
+    const baseString = `${userIdStr},${usernameStr},${authCodeStr},${salt}`;
 
-    // const expectedHashtest = crypto
-    //   .createHash("sha256")
-    //   .update(baseString, "utf8")
-    //   .digest("hex");
+    const expectedHashtest = crypto
+      .createHash("sha256")
+      .update(baseString, "utf8")
+      .digest("hex");
 
-    // console.log("  expectedHash:", expectedHashtest);
-    // console.log("  received hash:", hash);
+    console.log("  expectedHash:", expectedHashtest);
+    console.log("  received hash:", hash);
 
     // ====================================================================================================
 
