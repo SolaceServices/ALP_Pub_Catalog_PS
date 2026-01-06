@@ -583,22 +583,57 @@ app.get("/user-stats", async (req, res) => {
       font-size: 40px !important;
       margin: 2rem;
       font-weight: 500;
+      width: 100%;
     }
     .ext-get-started-hero-description {
       max-width: 65%;
       line-height: 1.75rem !important;
+      font-size: 14px;
+      font-weight: 300;
+      margin-top: 0;
     }
     .ext-get-started-stats { padding-top: 1rem; }
     .ext-get-started-stat-card {
       background-color: #092c48;
       color: #b7fe86;
-      width: 7rem;
+      width: 8rem;
     }
     .ext-get-started-stat-number {
       font-size: 1.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
-    .ext-get-started-stat-label { font-size: 0.8rem; }
+
+    .ext-get-started-stat-label {
+      font-size: 12.8px;
+      font-weight: 300;
+    }
+
+/* -------------------------
+       Media Queries
+    --------------------------*/
+    @media (max-width: 659px){
+      .ext-get-started-hero-description {
+        max-width: 100%;
+      }
+    }
+    @media (max-width: 555px){
+      .ext-get-started-stat-card {
+        background-color: #092c48;
+        color: #b7fe86;
+        width: 8rem;
+        margin: 0.2rem !important;
+      }
+    }
+    @media (max-width: 501px){
+      .ext-get-started-stat-card {
+        display: none;
+      }
+    }
+    @media (max-width: 405px){
+      .ext-get-started-hero-title {
+        font-size: 35px;
+      }
+    }
   </style>
 </head>
 <body>
