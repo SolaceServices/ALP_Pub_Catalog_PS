@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const axios = require("axios");
+const crypto = require("crypto");
 const cors = require("cors");
 const CircuitBreaker = require("opossum");
 const PORT = process.env.PORT || 4000;
@@ -206,7 +207,55 @@ app.get("/health", (req, res) => {
 });
 app.get("/user-stats", async (req, res) => {
   try {
-    const { access_token } = await getToken();
+    const { auth_code, user_id, username, hash } = req.query;
+
+    if (!auth_code || !user_id || !username || !hash) {
+      return res.status(400).send("Missing parameters");
+    }
+
+    // ====================================================================================================
+
+    // const userIdStr = String(user_id);
+    // const usernameStr = String(username);
+    // const authCodeStr = String(auth_code);
+    // const salt = String(process.env.DOCEBO_SALT_SECRET);
+
+    // const baseString = `${userIdStr},${usernameStr},${authCodeStr},${salt}`;
+
+    // const expectedHashtest = crypto
+    //   .createHash("sha256")
+    //   .update(baseString, "utf8")
+    //   .digest("hex");
+
+    // console.log("  expectedHash:", expectedHashtest);
+    // console.log("  received hash:", hash);
+
+    // ====================================================================================================
+
+    const expectedHash = crypto
+      .createHash("sha256")
+      .update(
+        `${user_id},${username},${auth_code},${process.env.DOCEBO_SALT_SECRET}`
+      )
+      .digest("hex");
+
+    if (hash !== expectedHash) {
+      return res.status(401).send("Invalid signature");
+    }
+
+    const tokenResp = await axios.post(
+      `${process.env.DOCEBO_API_URL}/oauth2/token`,
+      new URLSearchParams({
+        grant_type: "authorization_code",
+        code: auth_code,
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        redirect_uri: "http://training.solace.com",
+      })
+    );
+
+    const access_token = tokenResp.data.access_token;
+
     const data = await breaker.fire(
       `https://solacelearn.docebosaas.com/report/v1/mytranscript?page_size=200&page=1`,
       {
